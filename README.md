@@ -6,7 +6,7 @@ TG-CLI Based Broadcasting Bot.
 
 git clone https://Github.com/VIP-GOLD/VIP-CONTROL.git
 
-cd gold
+cd VIP-CONTROL
 
 chmod +x install.sh
 
