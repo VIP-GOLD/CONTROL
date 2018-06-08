@@ -164,108 +164,18 @@ function process(msg)
           text_:match("^[!/#](رفع مطور) (%d+)")
         }
         if #matches == 2 then
-          redis:sadd("CONTROL:" .. tostring(CONTROL_id) .. ":sudoers", tonumber(matches[2]))
-          save_log("- العضو 🚸 " .. msg.sender_user_id_ .. ", اصبح " .. matches[2] .. " مطور في البوت")
+          redis:sadd("tabchi:" .. tostring(tabchi_id) .. ":sudoers", tonumber(matches[2]))
+          save_log("User " .. msg.sender_user_id_ .. ", Added " .. matches[2] .. " As Sudo")
           return tostring(matches[2]) .. " Added to Sudo Users"
         end
 			    elseif text_:match("^[!/#](الاوامر)") and is_sudo(msg) then
       local text1 = [[
-        - اوامر بوت التحكم بالحساب ، 📮'
-        /ارسال <ايدي الحساب> <النص>
-        - لارسال رسالة الى صاحب الايدي ، 🔖'
-        
-        /حظر <ايدي الحساب>
-        - لحظر الحساب صاحب الايدي ، 📵'
-        
-        /الغاء الحظر <userid>
-        - لالغاء حظر الحساب صاحب الايدي ، 🌀'
-        
-        /المعلومات
-        - لاظهار معلومات الحساب كـ (عدد الاشخاص الذي تم التواصل معهم- وعدد المجموعات العادية - وعدد المجموعات الخارقة - وعدد الروابط التي تم حفظها - وعدد الجهات التي تم حفظها ، 🚸'
-        
-        /رفع مطور <ايدي الحساب>
-        - لاضافة مطور للبوت من خلال الايدي ، 🔋'
-        
-        /تنزيل مطور <ايدي الحساب>
-        - لازالة مطور من البوت من خلال الايدي ،🚱'
-        
-        /المطورين
-        - لعرض قائمة مطورين البوت ، 🔱'
-        
-        /اذاعه <النص>
-        - لعمل اذاعه ملاحظة هذه الخاصية تشمل جميع المحادثات (خاص - مجموعات - قنوات - بوتات) ، ☯️'
-        
-        /توجيه <الكل - الخاص - المجموعات الخارقة - المجموعات> ( بالرد)
-        - لعمل توجيه لرسالة على الخاص او المجموعات ، ⚜️'
-        - طريقة الاستخدام كالاتي:- تعمل توجيه للرسالة الى  البوت وبعدها الرد على الرسالة
-        - وكتابة (توجيه - واختيار مكان التوجيه)
-        
-        /كول <النص>
-        - لجعل البوت ينطق الكلمة التي تريدها ، 🗣'
-        
-        /addedmsg <on/off>
-        اگر این سوییچ روشن باشد بعد ازارسال مخاطب در گروه پیامی مبنی بر ذخیره شدن شماره مخاطب ارسال میگردد‼️
-        
-        /انضمام للروابط <تفعيل/تعطيل>
-        - عندما ترسل قناة او احد الاشخاص رابط الى البوت سيتم الدخول الى الرابط تلقائيا والانضمام ، 🔻'
-        
-        /حفظ الروابط <تفعيل/تعطيل>
-        - عندما ترسل قناة او احد الاشخاص رابط الى البوت سيتم حفظ الرابط في ملف في السيرفر ، ⚡️'
-        
-        /اضافة جهات <تفعيل/تعطيل>
-        - عندما ترسل قناة او احد الاشخاص جهة اتصال الى خاص البوت سيتم حفظ الجهة تلقائيا، ⚡️'
-        
-        /setaddedmsg <text>
-        شخصی سازی متن ارسالی جهت ذخیره کردن شماره ها و عکس العمل در برابر ان.
-        
-        /markread <on / off>
-        سوییچ تعویض حالت خوانده شدن پیام ها توسط ربات تبلیغاتی🔑👓
-        
-        /setanswer '<word>'  <text>
-        تنظیم <text> به عنوان جواب اتوماتیک <word> جهت گفتکوی هوشمندانه در گروه ها📲
-        🚨نکته :‌<word> باید داخل '' باشد
-        
-        /delanswer <word>
-        حذف جواب مربوط به <word>
-        
-        /الردود
-        لعرض قائمة ردود البوت  ، 📮'
-        
-        /المحادثة التلقائية <تفعيل/تعطيل>
-        - لتفعيل المحادثة التلقائية ، 💭'
-        
-        /اضافة اعضاء
-        -  لاضافة جهات الاتصال الى المجموعة  ، 🚸'
-        
-        /استخراج الروابط
-        - لاستخراج الراوبط المحفوضة في السيرفر وارسالها اليك ك ملف  ، 🔗'
-        
-        /الجهات
-         - لارسال اليك ملف يحتوى على جهات الاتصال المحفوظة  ، 📍'
-        
-        /addedcontact <on/off>
-        ارسال شماره تلفن ربات هنگامی که کسی شماره خود را ارسال میکند☎️📞
-        
-        /وضع اسم 'الاسم الاول' - 'الاسم الاخير'
-        - لوضع اسم للبوت  ، 🔖'
-        
-        /وضع معرف <المعرف>
-        - لوضع معرف (اسم مستخدم) للبوت من اختيارك  ، 🗞'
-        
-        /اضافة الاعضاء
-        - لاضافة جميع الاعضاء الى المجموعة الذي تم التواصل معهم  ، 🔏'
-        /تحديث
-        - لتحديث البوت وحل المشاكل  ، ♻️'
-        
-        /تحديث عام
-        آپدیت کردن فایل های ربات
-        -------------------------
-                
-        قابل توجه کاربران عزیز : 
-        نسخه 5.5 این ربات (کامل ترین نسخه و دارای امکانات عالی) به فروش میرسد
-        برای اطلاع بیشتر و خرید سورس ربات به آیدی زیر مراجعه نمایید.
-                
-        Help >> @amody7 ]]
+اهلا صديقي جميع الاوامر تعمل ب (/#!)
+👨‍⚖️¦/م1 » اوامر الارسال
+📟¦ /م2 » اوامر الحفظ التلقائي
+🛡¦ /م3 » اوامر الجهات والاضافة
+⚙️¦ /م4 » اوامر اخرى
+ - المطور ♥️ >> @amody7 ]]
 return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
 	  
       elseif text_:match("^[!/#](تنزيل مطور) (%d+)") then
@@ -275,11 +185,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         if #matches == 2 then
           redis:srem("CONTROL:" .. tostring(CONTROL_id) .. ":sudoers", tonumber(matches[2]))
           save_log("User " .. msg.sender_user_id_ .. ", Removed " .. matches[2] .. " From Sudoers")
-          return tostring(matches[2]) .. " Removed From Sudo Users"
+          return tostring(matches[2]) .. " صاحب هذا الايدي تم ازالته من قائمة مطورين البوت ✅"
         end
       elseif text_:match("^[!/#]المطورين$") then
         local sudoers = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":sudoers")
-        local text = "Bot Sudoers :\n"
+        local text = "- قائمة مطورين البوت ، 🚸'\n"
         for i, v in pairs(sudoers) do
           text = tostring(text) .. tostring(i) .. ". " .. tostring(v)
         end
@@ -295,7 +205,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         if #matches == 3 then
           tdcli.changeName(matches[2], matches[3])
           save_log("User " .. msg.sender_user_id_ .. ", Changed Name To " .. matches[2] .. " " .. matches[3])
-          return "Profile Name Changed To : " .. matches[2] .. " " .. matches[3]
+          return "- تم تغيير اسم البوت الى ، 📌':- " .. matches[2] .. " " .. matches[3]
         end
       elseif text_:match("^[!/#](وضع معرف) (.*)$") then
         local matches = {
@@ -304,12 +214,12 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         if #matches == 2 then
           tdcli.changeUsername(matches[2])
           save_log("User " .. msg.sender_user_id_ .. ", Changed Username To " .. matches[2])
-          return "Username Changed To : @" .. matches[2]
+          return "- تم تغيير معرف البوت الى ، 🔖':- @" .. matches[2]
         end
       elseif text_:match("^[!/#](delusername)$") then
         tdcli.changeUsername()
         save_log("User " .. msg.sender_user_id_ .. ", Deleted Username")
-        return "Username Deleted"
+        return "- تم حذف معرف البوت ، 🔖'"
       else
         local matches = {
           text_:match("^[$](.*)")
@@ -327,7 +237,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       if #matches == 3 then
         tdcli.sendMessage(tonumber(matches[2]), 0, 1, matches[3], 1, "html")
         save_log("User " .. msg.sender_user_id_ .. ", Sent A ارسال To " .. matches[2] .. ", Content : " .. matches[3])
-        return "Sent!"
+        return "- تم ارسال الرسالة الى الجميع بنجاح ،✅'"
       end
 	  
     elseif text_:match("^[!/#](setanswer) '(.*)' (.*)") then
@@ -351,7 +261,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         return "Answer for " .. tostring(matches[2]) .. " deleted"
       end
     elseif text_:match("^[!/#]الردود$") then
-      local text = "Bot auto الردود :\n"
+      local text = "- قائمة ردود البوت التلقائية  ،🗣' :\n"
       local answrs = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":الردودlist")
       for i, v in pairs(answrs) do
         text = tostring(text) .. tostring(i) .. ". " .. tostring(v) .. " : " .. tostring(redis:hget("CONTROL:" .. tostring(CONTROL_id) .. ":الردود", v)) .. "\n"
@@ -400,7 +310,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       save_log("User " .. msg.sender_user_id_ .. ", Joined " .. matches[2] .. " Via Bot")
       tdcli.addChatMember(tonumber(matches[2]), msg.sender_user_id_, 50)
       return "I've Invited You To " .. matches[2]
-    elseif text_:match("^[!/#]addmembers$") and msg.chat_type_ ~= "private" then
+    elseif text_:match("^[!/#]اضافة الجهات$") and msg.chat_type_ ~= "private" then
       local add_all
       function add_all(extra, result)
         local usrs = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":pvis")
@@ -418,7 +328,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         limit_ = 999999999
       }, add_all, {})
       save_log("User " .. msg.sender_user_id_ .. ", Used AddMembers In " .. msg.chat_id_)
-      return "Adding members to group..."
+      return "- تم اضافة جميع جهات الاتصال  في المجموعة ،🚸'
     elseif text_:match("^[!/#]الجهات$") then
       tdcli_function({
         ID = "SearchContacts",
@@ -438,7 +348,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         end
       end
       writefile("CONTROL_" .. tostring(CONTROL_id) .. "_links.txt", text)
-      tdcli.send_file(msg.chat_id_, "Document", "CONTROL_" .. tostring(CONTROL_id) .. "_links.txt", "CONTROL " .. tostring(CONTROL_id) .. " Links!")
+      tdcli.send_file(msg.chat_id_, "Document", "روابطك" .. tostring(CONTROL_id) .. "_المحفوظة.txt", "لديك " .. tostring(CONTROL_id) .. " رابط محفوظ")
       save_log("User " .. msg.sender_user_id_ .. ", Requested Contact List")
       return io.popen("rm -rf CONTROL_" .. tostring(CONTROL_id) .. "_links.txt"):read("*all")
     elseif text_:match("[!/#](حظر) (%d+)") then
@@ -448,7 +358,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       if #matches == 2 then
         tdcli.blockUser(tonumber(matches[2]))
         save_log("User " .. msg.sender_user_id_ .. ", Blocked " .. matches[2])
-        return "User blocked"
+        return "- تم حظر العضو بنجاح ، 📵'"
       end
     elseif text_:match("[!/#](الغاء الحظر) (%d+)") then
       local matches = {
@@ -457,7 +367,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       if #matches == 2 then
         tdcli.unblockUser(tonumber(matches[2]))
         save_log("User " .. msg.sender_user_id_ .. ", Unlocked " .. matches[2])
-        return "User unblocked"
+        return "- تم الغاء حظر العضو بنجاح ، 📵'"
       end
     elseif text_:match("^[!/#](s2a) (.*) (.*)") then
       local matches = {
@@ -500,104 +410,103 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       local contacts = redis:get("CONTROL:" .. tostring(CONTROL_id) .. ":totalcontacts")
       local query = tostring(gps) .. " " .. tostring(sgps) .. " " .. tostring(pvs) .. " " .. tostring(links) .. " " .. tostring(sudo) .. " " .. tostring(contacts)
           local text = [[
-		  
-            - معلومات البوت الحالية ، 📌
+ֆ - - - - - - - - - - - - - - ֆ
+- 📝 معلومات البوت الحالية ، 📌
+- 🔖   المراسلهم :  ]] .. tostring(pvs) .. [[
+            
+- 📯    المجموعات العادية : ]] .. tostring(gps) .. [[
+            
+-📊    المجموعات الخارقة : ]] .. tostring(sgps) .. [[
+            
+- 📨     الروابط المحفوظة :  ]] .. tostring(links) .. [[
 
-            المراسلهم : ]] .. tostring(pvs) .. [[
-            
-            المجموعات العادية : ]] .. tostring(gps) .. [[
-            
-            المجموعات الخارقة : ]] .. tostring(sgps) .. [[
-            
-            الروابط المحفوظة : ]] .. tostring(links) .. [[
-            
-            الجهات المحفوظة : ]] .. tostring(contacts)
+🗃    الجهات المحفوظة : ]] .. tostring(contacts)
  return tdcli.sendMessage(msg.chat_id_, 0, 1, text, 1, "")
     elseif text_:match("^[!/#](addedmsg) (.*)") then
       local matches = {
         text_:match("^[!/#](addedmsg) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":addedmsg", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Added Message")
           return "Added Message Turned On"
-        elseif matches[2] == "off" then
+        elseif matches[2] == "تعطيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":addedmsg")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Added Message")
           return "Added Message Turned Off"
         end
       end
-    elseif text_:match("^[!/#](addedcontact) (.*)") then
+    elseif text_:match("^[!/#](حفظ الجهات تلقائيا) (.*)") then
       local matches = {
-        text_:match("^[!/#](addedcontact) (.*)")
+        text_:match("^[!/#](حفظ الجهات تلقائيا) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":addedcontact", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Added Contact")
-          return "Added Contact Turned On"
-        elseif matches[2] == "off" then
+          return "- تم تفعيل خاصية حفظ الجهات تلقائيا ، 👤'"
+        elseif matches[2] == "تعطيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":addedcontact")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Added Contact")
-          return "Added Contact Turned Off"
+          return "- تم تعطيل خاصية حفظ الجهات تلقائيا ، 👤'"
         end
       end
-    elseif text_:match("^[!/#](markread) (.*)") then
+    elseif text_:match("^[!/#](قرائة الرسائل) (.*)") then
       local matches = {
-        text_:match("^[!/#](markread) (.*)")
+        text_:match("^[!/#](قرائة الرسائل) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":markread", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Markread")
-          return "Markread Turned On"
-        elseif matches[2] == "off" then
+          return "- تم تفعيل خاصية تمت قرائة الرسالة ، 👤'"
+        elseif matches[2] == "تعطيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":markread")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Markread")
-          return "Markread Turned Off"
+          return "- تم تعطيل خاصية تمت قرائة الرسالة ، 👤'"
         end
       end
-    elseif text_:match("^[!/#](joinlinks) (.*)") then
+    elseif text_:match("^[!/#](الانضمام التلقائي) (.*)") then
       local matches = {
-        text_:match("^[!/#](joinlinks) (.*)")
+        text_:match("^[!/#](الانضمام التلقائي) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":notjoinlinks")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Joinlinks")
-          return "Joinlinks Turned On"
-        elseif matches[2] == "off" then
+          return "- تم تفعيل خاصية الانضمام التلقائي الى الروابط ، 👤'"
+        elseif matches[2] == "تعطيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":notjoinlinks", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Joinlinks")
-          return "Joinlinks Turned Off"
+          return "- تم تعطيل خاصية الانضمام التلقائي الى الروابط ، 👤'"
         end
       end
-    elseif text_:match("^[!/#](savelinks) (.*)") then
+    elseif text_:match("^[!/#](حفظ الروابط) (.*)") then
       local matches = {
-        text_:match("^[!/#](savelinks) (.*)")
+        text_:match("^[!/#](حفظ الروابط) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":notsavelinks")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Savelinks")
-          return "Savelinks Turned On"
-        elseif matches[2] == "off" then
+          return "- تم تفعيل خاصية حفظ روابط المجموعات والقنوات ، 👤'"
+        elseif matches[2] == "تعطيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":notsavelinks", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Savelinks")
-          return "Savelinks Turned Off"
+          return "- تم تعطيل خاصية حفظ روابط المجموعات والقنوات ، 👤'"
         end
       end
-    elseif text_:match("^[!/#](addcontacts) (.*)") then
+    elseif text_:match("^[!/#](حفظ الجهات) (.*)") then
       local matches = {
-        text_:match("^[!/#](addcontacts) (.*)")
+        text_:match("^[!/#](حفظ الجهات) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":notaddcontacts")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Addcontacts")
           return "Addcontacts Turned On"
-        elseif matches[2] == "off" then
+        elseif matches[2] == "تعطيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":notaddcontacts", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Addcontacts")
           return "Addcontacts Turned Off"
@@ -608,29 +517,29 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         text_:match("^[!/#](autochat) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":autochat", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Autochat")
           return "Autochat Turned On"
-        elseif matches[2] == "off" then
+        elseif matches[2] == "تعطيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":autochat")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Autochat")
           return "Autochat Turned Off"
         end
       end
-    elseif text_:match("^[!/#](typing) (.*)") then
+    elseif text_:match("^[!/#](جاري الكتابة) (.*)") then
       local matches = {
-        text_:match("^[!/#](typing) (.*)")
+        text_:match("^[!/#](جاري الكتابة) (.*)")
       }
       if #matches == 2 then
-        if matches[2] == "on" then
+        if matches[2] == "تفعيل" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":typing", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Typing")
-          return "Typing Turned On"
-        elseif matches[2] == "off" then
+          return "- تم تفعيل خاصية جاري الكتابة ، 💭"
+        elseif matches[2] == "تعطيل" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":typing")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Typing")
-          return "Typing Turned Off"
+          return "- تم تعطيل خاصية جاري الكتابة ، 💭"
         end
       end
     elseif text_:match("^[!/#](setaddedmsg) (.*)") then
@@ -645,9 +554,9 @@ New Added Message Set
 Message :
 ]] .. tostring(matches[2])
       end
-    elseif text_:match("^[!/#](bc) (.*)") then
+    elseif text_:match("^[!/#](اذاعه) (.*)") then
       local matches = {
-        text_:match("^[!/#](bc) (.*)")
+        text_:match("^[!/#](اذاعه) (.*)")
       }
       if #matches == 2 then
         local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":all")
@@ -672,14 +581,14 @@ Message :
           }, dl_cb, nil)
         end
         save_log("User " .. msg.sender_user_id_ .. ", Used BC, Content " .. matches[2])
-        return "Sent!"
+        return "- تم عمل اذاعه لهذه الرسالة ، 👁'"
       end
     elseif text_:match("^[!/#](توجيه) (.*)$") then
       local matches = {
         text_:match("^[!/#](توجيه) (.*)$")
       }
       if #matches == 2 then
-        if matches[2] == "all" then
+        if matches[2] == "الكل" then
           local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":all")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
@@ -695,7 +604,7 @@ Message :
             }, dl_cb, nil)
           end
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd All")
-        elseif matches[2] == "usrs" then
+        elseif matches[2] == "الخاص" then
           local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":pvis")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
@@ -711,7 +620,7 @@ Message :
             }, dl_cb, nil)
           end
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Users")
-        elseif matches[2] == "gps" then
+        elseif matches[2] == "المجموعات العادية" then
           local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":groups")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
@@ -727,7 +636,7 @@ Message :
             }, dl_cb, nil)
           end
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Gps")
-        elseif matches[2] == "sgps" then
+        elseif matches[2] == "المجموعات الخارقة" then
           local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":channels")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
@@ -745,7 +654,7 @@ Message :
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Sgps")
         end
       end
-      return "Sent!"
+      return "- تم عمل توجيه لهذه الرسالة ، 👁'"
     else
       local matches = {
         text_:match("^[!/#](كول) (.*)")
@@ -771,13 +680,11 @@ function update(data, CONTROL_id)
       if data.message_.content_.text_:match([[
 Your login code:
 (%d+)
-
 This code]]) then
         local code = {
           data.message_.content_.text_:match([[
 Your login code:
 (%d+)
-
 This code]])
         }
         local file = ltn12.sink.file(io.open("CONTROL_" .. CONTROL_id .. "_code.png", "w"))
