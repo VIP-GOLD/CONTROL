@@ -328,7 +328,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         limit_ = 999999999
       }, add_all, {})
       save_log("User " .. msg.sender_user_id_ .. ", Used AddMembers In " .. msg.chat_id_)
-      return "- تم اضافة جميع جهات الاتصال  في المجموعة ،🚸"
+      return " تم اضافة جميع جهات الاتصال  في المجموعة ،🚸"
     elseif text_:match("^[!/#]الجهات$") then
       tdcli_function({
         ID = "SearchContacts",
