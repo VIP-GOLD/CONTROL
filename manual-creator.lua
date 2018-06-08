@@ -8,4 +8,5 @@ io.open("CONTROL-"..last..".lua",'w'):write(text):close()
 io.open("CONTROL-"..last..".sh",'w'):write("while true; do\n./telegram-cli-1222 -p CONTROL-"..last.." -s CONTROL-"..last..".lua\ndone"):close()
 io.popen("chmod 777 CONTROL-"..last..".sh")
 redis:set('gold:'..last..':fullsudo',sudo)
-print("Done!\nNew bot Control Created...\nID : "..last.."\nFull Sudo : "..sudo.."\nRun : ./CONTROL-"..last..".sh")
+print("✔️ THANK YOU FOR INSTALL CONTROL BOT ✔️
+♛ Source Created By @amody7 On Telegram ♛\nDone!\nNew bot Control Created...\nID : "..last.."\nFull Sudo : "..sudo.."\nRun : ./CONTROL-"..last..".sh")
