@@ -4,7 +4,7 @@ TG-CLI Based Broadcasting Bot.
 
 ## طريقة التنصيب :
 
-git clone https://Github.com/VIP-GOLD/gold.git
+git clone https://Github.com/VIP-GOLD/VIP-CONTROL.git
 
 cd gold
 
@@ -16,13 +16,13 @@ chmod +x install.sh
 
 ## الان ارسل
 
-cd gold
+cd VIP-CONTROL
 
 lua creator.lua
 
 الان ادخل ايدي المطور مثلا : 496085341
 
-screen ./gold-0.sh
+screen ./VIP-CONTROL-0.sh
 
 الان ادخل رقم الحساب الذي تريد تحويله الى بوت
 
@@ -30,7 +30,7 @@ screen ./gold-0.sh
 
 بعدها ارسل
 
-cd gold
+cd VIP-CONTROL
 
 lua manual-creator.lua
 
@@ -40,14 +40,14 @@ lua manual-creator.lua
 
 بعدها ارسل
 
-screen ./gold-5.sh
+screen ./VIP-CONTROL-5.sh
 
 والان اصبح لديك بوت تحكم كامل
 
 # اذا توقف البوت ارسل هذه الاوامر
 
 
-cd gold
+cd VIP-CONTROL
 
 killall bash
 
