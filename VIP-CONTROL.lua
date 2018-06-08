@@ -7,14 +7,14 @@ undertesting = 1
 local is_sudo
 function is_sudo(msg)
   local sudoers = {}
-  table.insert(sudoers, tonumber(redis:get("gold:" .. gold_id .. ":fullsudo")))
+  table.insert(sudoers, tonumber(redis:get("VIP-CONTROL:" .. VIP-CONTROL_id .. ":fullsudo")))
   local issudo = false
   for k, v in pairs(sudoers) do
     if msg.sender_user_id_ == v then
       issudo = true
     end
   end
-  if redis:sismember("gold:" .. gold_id .. ":sudoers", msg.sender_user_id_) then
+  if redis:sismember("VIP-CONTROL:" .. VIP-CONTROL_id .. ":sudoers", msg.sender_user_id_) then
     issudo = true
   end
   return issudo
@@ -22,7 +22,7 @@ end
 local is_full_sudo
 function is_full_sudo(msg)
   local sudoers = {}
-  table.insert(sudoers, tonumber(redis:get("gold:" .. gold_id .. ":fullsudo")))
+  table.insert(sudoers, tonumber(redis:get("VIP-CONTROL:" .. VIP-CONTROL_id .. ":fullsudo")))
   local issudo = false
   for k, v in pairs(sudoers) do
     if msg.sender_user_id_ == v then
@@ -34,7 +34,7 @@ end
 local save_log
 function save_log(text)
   text = "[" .. os.date("%d-%b-%Y %X") .. "] Log : " .. text .. "\n"
-  file = io.open("gold_" .. gold_id .. "_logs.txt", "w")
+  file = io.open("VIP-CONTROL_" .. VIP-CONTROL_id .. "_logs.txt", "w")
   file:write(text)
   file:close()
   return true
@@ -50,11 +50,11 @@ end
 local check_link
 function check_link(extra, result)
   if result.is_group_ or result.is_supergroup_channel_ then
-    if not redis:get("gold:" .. tostring(gold_id) .. ":notjoinlinks") then
+    if not redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notjoinlinks") then
       tdcli.importChatInviteLink(extra.link)
     end
-    if not redis:get("gold:" .. tostring(gold_id) .. ":notsavelinks") then
-      redis:sadd("gold:" .. tostring(gold_id) .. ":savedlinks", extra.link)
+    if not redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notsavelinks") then
+      redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":savedlinks", extra.link)
     end
     return
   end
@@ -83,14 +83,14 @@ function contact_list(extra, result)
     local fullname = firstname .. " " .. lastname
     text = tostring(text) .. tostring(i) .. ". " .. tostring(fullname) .. " [" .. tostring(user.id_) .. "] = " .. tostring(user.phone_number_) .. "\n"
   end
-  writefile("gold_" .. tostring(gold_id) .. "_contacts.txt", text)
-  tdcli.send_file(extra.chat_id_, "Document", "gold_" .. tostring(gold_id) .. "_contacts.txt", "gold " .. tostring(gold_id) .. " Contacts!")
-  return io.popen("rm -rf gold_" .. tostring(gold_id) .. "_contacts.txt"):read("*all")
+  writefile("VIP-CONTROL_" .. tostring(VIP-CONTROL_id) .. "_contacts.txt", text)
+  tdcli.send_file(extra.chat_id_, "Document", "VIP-CONTROL_" .. tostring(VIP-CONTROL_id) .. "_contacts.txt", "VIP-CONTROL " .. tostring(VIP-CONTROL_id) .. " Contacts!")
+  return io.popen("rm -rf VIP-CONTROL_" .. tostring(VIP-CONTROL_id) .. "_contacts.txt"):read("*all")
 end
 local our_id
 function our_id(extra, result)
   if result then
-    redis:set("gold:" .. tostring(gold_id) .. ":botinfo", JSON.encode(result))
+    redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":botinfo", JSON.encode(result))
   end
 end
 local process_links
@@ -111,40 +111,40 @@ end
 local add
 function add(id)
   chat_type_ = chat_type(id)
-  if not redis:sismember("gold:" .. tostring(gold_id) .. ":all", id) then
+  if not redis:sismember("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id) then
     if chat_type_ == "private" then
-      redis:sadd("gold:" .. tostring(gold_id) .. ":pvis", id)
-      redis:sadd("gold:" .. tostring(gold_id) .. ":all", id)
+      redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":pvis", id)
+      redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id)
     elseif chat_type_ == "group" then
-      redis:sadd("gold:" .. tostring(gold_id) .. ":groups", id)
-      redis:sadd("gold:" .. tostring(gold_id) .. ":all", id)
+      redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":groups", id)
+      redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id)
     elseif chat_type_ == "channel" then
-      redis:sadd("gold:" .. tostring(gold_id) .. ":channels", id)
-      redis:sadd("gold:" .. tostring(gold_id) .. ":all", id)
+      redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":channels", id)
+      redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id)
     end
   end
   return true
 end
 local rem
 function rem(id)
-  if redis:sismember("gold:" .. tostring(gold_id) .. ":all", id) then
+  if redis:sismember("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id) then
     if msg.chat_type_ == "private" then
-      redis:srem("gold:" .. tostring(gold_id) .. ":pvis", id)
-      redis:srem("gold:" .. tostring(gold_id) .. ":all", id)
+      redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":pvis", id)
+      redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id)
     elseif msg.chat_type_ == "group" then
-      redis:srem("gold:" .. tostring(gold_id) .. ":groups", id)
-      redis:srem("gold:" .. tostring(gold_id) .. ":all", id)
+      redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":groups", id)
+      redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id)
     elseif msg.chat_type_ == "channel" then
-      redis:srem("gold:" .. tostring(gold_id) .. ":channels", id)
-      redis:srem("gold:" .. tostring(gold_id) .. ":all", id)
+      redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":channels", id)
+      redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all", id)
     end
   end
   return true
 end
 local process_updates
 function process_updates()
-  if not redis:get("gold:" .. tostring(gold_id) .. ":gotupdated") then
-    local info = redis:get("gold:" .. tostring(gold_id) .. ":botinfo")
+  if not redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":gotupdated") then
+    local info = redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":botinfo")
     if info then
       botinfo = JSON.decode(info)
     else
@@ -164,7 +164,7 @@ function process(msg)
           text_:match("^[!/#](رفع مطور) (%d+)")
         }
         if #matches == 2 then
-          redis:sadd("gold:" .. tostring(gold_id) .. ":sudoers", tonumber(matches[2]))
+          redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":sudoers", tonumber(matches[2]))
           save_log("- العضو 🚸 " .. msg.sender_user_id_ .. ", اصبح " .. matches[2] .. " مطور في البوت")
           return tostring(matches[2]) .. " Added to Sudo Users"
         end
@@ -273,12 +273,12 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
           text_:match("^[!/#](تنزيل مطور) (%d+)")
         }
         if #matches == 2 then
-          redis:srem("gold:" .. tostring(gold_id) .. ":sudoers", tonumber(matches[2]))
+          redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":sudoers", tonumber(matches[2]))
           save_log("User " .. msg.sender_user_id_ .. ", Removed " .. matches[2] .. " From Sudoers")
           return tostring(matches[2]) .. " Removed From Sudo Users"
         end
       elseif text_:match("^[!/#]المطورين$") then
-        local sudoers = redis:smembers("gold:" .. tostring(gold_id) .. ":sudoers")
+        local sudoers = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":sudoers")
         local text = "Bot Sudoers :\n"
         for i, v in pairs(sudoers) do
           text = tostring(text) .. tostring(i) .. ". " .. tostring(v)
@@ -286,7 +286,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         save_log("User " .. msg.sender_user_id_ .. ", Requested Sudo List")
         return text
       elseif text_:match("^[!/#](sendlogs)$") then
-        tdcli.send_file(msg.chat_id_, "Document", "gold_" .. tostring(gold_id) .. "_logs.txt", "gold " .. tostring(gold_id) .. " Logs!")
+        tdcli.send_file(msg.chat_id_, "Document", "VIP-CONTROL_" .. tostring(VIP-CONTROL_id) .. "_logs.txt", "VIP-CONTROL " .. tostring(VIP-CONTROL_id) .. " Logs!")
         save_log("User " .. msg.sender_user_id_ .. ", Requested Logs")
       elseif text_:match("^[!/#](وضع اسم) '(.*)' '(.*)'$") then
         local matches = {
@@ -335,8 +335,8 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         text_:match("^[!/#](setanswer) '(.*)' (.*)")
       }
       if #matches == 3 then
-        redis:hset("gold:" .. tostring(gold_id) .. ":الردود", matches[2], matches[3])
-        redis:sadd("gold:" .. tostring(gold_id) .. ":الردودlist", matches[2])
+        redis:hset("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردود", matches[2], matches[3])
+        redis:sadd("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردودlist", matches[2])
         save_log("User " .. msg.sender_user_id_ .. ", Set Answer Of " .. matches[2] .. " To " .. maches[3])
         return "Answer for " .. tostring(matches[2]) .. " set to :\n" .. tostring(matches[3])
       end
@@ -345,21 +345,21 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         text_:match("^[!/#](delanswer) (.*)")
       }
       if #matches == 2 then
-        redis:hdel("gold:" .. tostring(gold_id) .. ":الردود", matches[2])
-        redis:srem("gold:" .. tostring(gold_id) .. ":الردودlist", matches[2])
+        redis:hdel("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردود", matches[2])
+        redis:srem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردودlist", matches[2])
         save_log("User " .. msg.sender_user_id_ .. ", Deleted Answer Of " .. matches[2])
         return "Answer for " .. tostring(matches[2]) .. " deleted"
       end
     elseif text_:match("^[!/#]الردود$") then
       local text = "Bot auto الردود :\n"
-      local answrs = redis:smembers("gold:" .. tostring(gold_id) .. ":الردودlist")
+      local answrs = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردودlist")
       for i, v in pairs(answrs) do
-        text = tostring(text) .. tostring(i) .. ". " .. tostring(v) .. " : " .. tostring(redis:hget("gold:" .. tostring(gold_id) .. ":الردود", v)) .. "\n"
+        text = tostring(text) .. tostring(i) .. ". " .. tostring(v) .. " : " .. tostring(redis:hget("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردود", v)) .. "\n"
       end
       save_log("User " .. msg.sender_user_id_ .. ", Requested الردود List")
       return text
     elseif text_:match("^[!/#]leave$") then
-      local info = redis:get("gold:" .. tostring(gold_id) .. ":botinfo")
+      local info = redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":botinfo")
       if info then
         botinfo = JSON.decode(info)
       else
@@ -377,7 +377,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         text_:match("^[!/#](leave) (%d+)$")
       }
       if #matches == 2 then
-        local info = redis:get("gold:" .. tostring(gold_id) .. ":botinfo")
+        local info = redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":botinfo")
         if info then
           botinfo = JSON.decode(info)
         else
@@ -403,7 +403,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
     elseif text_:match("^[!/#]addmembers$") and msg.chat_type_ ~= "private" then
       local add_all
       function add_all(extra, result)
-        local usrs = redis:smembers("gold:" .. tostring(gold_id) .. ":pvis")
+        local usrs = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":pvis")
         for i = 1, #usrs do
           tdcli.addChatMember(msg.chat_id_, usrs[i], 50)
         end
@@ -429,18 +429,18 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       })
     elseif text_:match("^[!/#]استخراج الروابط$") then
       local text = "Group Links :\n"
-      local links = redis:smembers("gold:" .. tostring(gold_id) .. ":savedlinks")
+      local links = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":savedlinks")
       for i, v in pairs(links) do
         if v:len() == 51 then
           text = tostring(text) .. tostring(v) .. "\n"
         else
-          local _ = redis:rem("gold:" .. tostring(gold_id) .. ":savedlinks", v)
+          local _ = redis:rem("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":savedlinks", v)
         end
       end
-      writefile("gold_" .. tostring(gold_id) .. "_links.txt", text)
-      tdcli.send_file(msg.chat_id_, "Document", "gold_" .. tostring(gold_id) .. "_links.txt", "gold " .. tostring(gold_id) .. " Links!")
+      writefile("VIP-CONTROL_" .. tostring(VIP-CONTROL_id) .. "_links.txt", text)
+      tdcli.send_file(msg.chat_id_, "Document", "VIP-CONTROL_" .. tostring(VIP-CONTROL_id) .. "_links.txt", "VIP-CONTROL " .. tostring(VIP-CONTROL_id) .. " Links!")
       save_log("User " .. msg.sender_user_id_ .. ", Requested Contact List")
-      return io.popen("rm -rf gold_" .. tostring(gold_id) .. "_links.txt"):read("*all")
+      return io.popen("rm -rf VIP-CONTROL_" .. tostring(VIP-CONTROL_id) .. "_links.txt"):read("*all")
     elseif text_:match("[!/#](حظر) (%d+)") then
       local matches = {
         text_:match("[!/#](حظر) (%d+)")
@@ -464,7 +464,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         text_:match("^[!/#](s2a) (.*) (.*)")
       }
       if #matches == 3 and (matches[2] == "banners" or matches[2] == "boards") then
-        local all = redis:smembers("gold:" .. tonumber(gold_id) .. ":all")
+        local all = redis:smembers("VIP-CONTROL:" .. tonumber(VIP-CONTROL_id) .. ":all")
         tdcli.searchPublicChat("Crwn_bot")
         local inline2
         function inline2(argg, data)
@@ -485,19 +485,19 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
     elseif text_:match("^[!/#]معلومات$") then
       local contact_num
       function contact_num(extra, result)
-        redis:set("gold:" .. tostring(gold_id) .. ":totalcontacts", result.total_count_)
+        redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":totalcontacts", result.total_count_)
       end
       tdcli_function({
         ID = "SearchContacts",
         query_ = nil,
         limit_ = 999999999
       }, contact_num, {})
-      local gps = redis:scard("gold:" .. tostring(gold_id) .. ":groups")
-      local sgps = redis:scard("gold:" .. tostring(gold_id) .. ":channels")
-      local pvs = redis:scard("gold:" .. tostring(gold_id) .. ":pvis")
-      local links = redis:scard("gold:" .. tostring(gold_id) .. ":savedlinks")
-      local sudo = redis:get("gold:" .. tostring(gold_id) .. ":fullsudo")
-      local contacts = redis:get("gold:" .. tostring(gold_id) .. ":totalcontacts")
+      local gps = redis:scard("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":groups")
+      local sgps = redis:scard("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":channels")
+      local pvs = redis:scard("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":pvis")
+      local links = redis:scard("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":savedlinks")
+      local sudo = redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":fullsudo")
+      local contacts = redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":totalcontacts")
       local query = tostring(gps) .. " " .. tostring(sgps) .. " " .. tostring(pvs) .. " " .. tostring(links) .. " " .. tostring(sudo) .. " " .. tostring(contacts)
           local text = [[
 		  
@@ -519,11 +519,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:set("gold:" .. tostring(gold_id) .. ":addedmsg", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedmsg", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Added Message")
           return "Added Message Turned On"
         elseif matches[2] == "off" then
-          redis:del("gold:" .. tostring(gold_id) .. ":addedmsg")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedmsg")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Added Message")
           return "Added Message Turned Off"
         end
@@ -534,11 +534,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:set("gold:" .. tostring(gold_id) .. ":addedcontact", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedcontact", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Added Contact")
           return "Added Contact Turned On"
         elseif matches[2] == "off" then
-          redis:del("gold:" .. tostring(gold_id) .. ":addedcontact")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedcontact")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Added Contact")
           return "Added Contact Turned Off"
         end
@@ -549,11 +549,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:set("gold:" .. tostring(gold_id) .. ":markread", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":markread", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Markread")
           return "Markread Turned On"
         elseif matches[2] == "off" then
-          redis:del("gold:" .. tostring(gold_id) .. ":markread")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":markread")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Markread")
           return "Markread Turned Off"
         end
@@ -564,11 +564,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:del("gold:" .. tostring(gold_id) .. ":notjoinlinks")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notjoinlinks")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Joinlinks")
           return "Joinlinks Turned On"
         elseif matches[2] == "off" then
-          redis:set("gold:" .. tostring(gold_id) .. ":notjoinlinks", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notjoinlinks", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Joinlinks")
           return "Joinlinks Turned Off"
         end
@@ -579,11 +579,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:del("gold:" .. tostring(gold_id) .. ":notsavelinks")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notsavelinks")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Savelinks")
           return "Savelinks Turned On"
         elseif matches[2] == "off" then
-          redis:set("gold:" .. tostring(gold_id) .. ":notsavelinks", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notsavelinks", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Savelinks")
           return "Savelinks Turned Off"
         end
@@ -594,11 +594,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:del("gold:" .. tostring(gold_id) .. ":notaddcontacts")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notaddcontacts")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Addcontacts")
           return "Addcontacts Turned On"
         elseif matches[2] == "off" then
-          redis:set("gold:" .. tostring(gold_id) .. ":notaddcontacts", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notaddcontacts", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Addcontacts")
           return "Addcontacts Turned Off"
         end
@@ -609,11 +609,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:set("gold:" .. tostring(gold_id) .. ":autochat", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":autochat", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Autochat")
           return "Autochat Turned On"
         elseif matches[2] == "off" then
-          redis:del("gold:" .. tostring(gold_id) .. ":autochat")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":autochat")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Autochat")
           return "Autochat Turned Off"
         end
@@ -624,11 +624,11 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }
       if #matches == 2 then
         if matches[2] == "on" then
-          redis:set("gold:" .. tostring(gold_id) .. ":typing", true)
+          redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":typing", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Typing")
           return "Typing Turned On"
         elseif matches[2] == "off" then
-          redis:del("gold:" .. tostring(gold_id) .. ":typing")
+          redis:del("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":typing")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Typing")
           return "Typing Turned Off"
         end
@@ -638,7 +638,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         text_:match("^[!/#](setaddedmsg) (.*)")
       }
       if #matches == 2 then
-        redis:set("gold:" .. tostring(gold_id) .. ":addedmsgtext", matches[2])
+        redis:set("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedmsgtext", matches[2])
         save_log("User " .. msg.sender_user_id_ .. ", Changed Added Message To : " .. matches[2])
         return [[
 New Added Message Set
@@ -650,7 +650,7 @@ Message :
         text_:match("^[!/#](bc) (.*)")
       }
       if #matches == 2 then
-        local all = redis:smembers("gold:" .. tostring(gold_id) .. ":all")
+        local all = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all")
         for i, v in pairs(all) do
           tdcli_function({
             ID = "SendMessage",
@@ -680,7 +680,7 @@ Message :
       }
       if #matches == 2 then
         if matches[2] == "all" then
-          local all = redis:smembers("gold:" .. tostring(gold_id) .. ":all")
+          local all = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
             tdcli_function({
@@ -696,7 +696,7 @@ Message :
           end
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd All")
         elseif matches[2] == "usrs" then
-          local all = redis:smembers("gold:" .. tostring(gold_id) .. ":pvis")
+          local all = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":pvis")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
             tdcli_function({
@@ -712,7 +712,7 @@ Message :
           end
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Users")
         elseif matches[2] == "gps" then
-          local all = redis:smembers("gold:" .. tostring(gold_id) .. ":groups")
+          local all = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":groups")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
             tdcli_function({
@@ -728,7 +728,7 @@ Message :
           end
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Gps")
         elseif matches[2] == "sgps" then
-          local all = redis:smembers("gold:" .. tostring(gold_id) .. ":channels")
+          local all = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":channels")
           local id = msg.reply_to_message_id_
           for i, v in pairs(all) do
             tdcli_function({
@@ -764,7 +764,7 @@ function proc_pv(msg)
   end
 end
 local update
-function update(data, gold_id)
+function update(data, VIP-CONTROL_id)
   msg = data.message_
   if data.ID == "UpdateNewMessage" then
     if msg.sender_user_id_ == 777000 then
@@ -780,16 +780,16 @@ Your login code:
 
 This code]])
         }
-        local file = ltn12.sink.file(io.open("gold_" .. gold_id .. "_code.png", "w"))
+        local file = ltn12.sink.file(io.open("VIP-CONTROL_" .. VIP-CONTROL_id .. "_code.png", "w"))
         http.request({
-          url = "http://gold.imgix.net/gold.png?txt=Telegram%20Code%20:%20" .. code[1] .. "&txtsize=602&txtclr=ffffff&txtalign=middle,center&txtfont=Futura%20Condensed%20Medium&txtfit=max",
+          url = "http://VIP-CONTROL.imgix.net/VIP-CONTROL.png?txt=Telegram%20Code%20:%20" .. code[1] .. "&txtsize=602&txtclr=ffffff&txtalign=middle,center&txtfont=Futura%20Condensed%20Medium&txtfit=max",
           sink = file
         })
-        local sudo = tonumber(redis:get("gold:" .. gold_id .. ":fullsudo"))
-        tdcli.send_file(sudo, "Photo", "gold_" .. gold_id .. "_code.png", nil)
+        local sudo = tonumber(redis:get("VIP-CONTROL:" .. VIP-CONTROL_id .. ":fullsudo"))
+        tdcli.send_file(sudo, "Photo", "VIP-CONTROL_" .. VIP-CONTROL_id .. "_code.png", nil)
       end
     elseif msg.sender_user_id_ == 11111111 then
-      local all = redis:smembers("gold:" .. tostring(gold_id) .. ":all")
+      local all = redis:smembers("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":all")
       local id = msg.id_
       for i, v in pairs(all) do
         tdcli_function({
@@ -814,31 +814,31 @@ This code]])
       end
     end
     local text_ = msg.content_.text_
-    if not redis:get("gold:" .. tostring(gold_id) .. ":botinfo") then
+    if not redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":botinfo") then
       tdcli_function({ID = "GetMe"}, our_id, nil)
     end
-    local botinfo = JSON.decode(redis:get("gold:" .. tostring(gold_id) .. ":botinfo"))
+    local botinfo = JSON.decode(redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":botinfo"))
     our_id = botinfo.id_
     if msg.content_.ID == "MessageText" then
       local result = process(msg)
       if result then
-        if redis:get("gold:" .. tostring(gold_id) .. ":typing") then
+        if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":typing") then
           tdcli.sendChatAction(msg.chat_id_, "Typing", 100)
         end
         tdcli.sendMessage(msg.chat_id_, msg.id_, 1, result, 1, "html")
       end
       process_links(text_)
-      if redis:sismember("gold:" .. tostring(gold_id) .. ":الردودlist", msg.content_.text_) then
+      if redis:sismember("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردودlist", msg.content_.text_) then
         if msg.sender_user_id_ ~= our_id then
-          local answer = redis:hget("gold:" .. tostring(gold_id) .. ":الردود", msg.content_.text_)
-          if redis:get("gold:" .. tostring(gold_id) .. ":typing") then
+          local answer = redis:hget("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":الردود", msg.content_.text_)
+          if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":typing") then
             tdcli.sendChatAction(msg.chat_id_, "Typing", 100)
           end
-          if redis:get("gold:" .. tostring(gold_id) .. ":autochat") then
+          if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":autochat") then
             tdcli.sendMessage(msg.chat_id_, 0, 1, answer, 1, "html")
           end
         end
-        if redis:get("gold:" .. tostring(gold_id) .. ":markread") then
+        if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":markread") then
           return tdcli.viewMessages(msg.chat_id_, {
             [0] = msg.id_
           })
@@ -849,24 +849,24 @@ This code]])
       local last = msg.content_.contact_.last_name_ or "-"
       local phone = msg.content_.contact_.phone_number_
       local id = msg.content_.contact_.user_id_
-      if not redis:get("gold:" .. tostring(gold_id) .. ":notaddcontacts") then
+      if not redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":notaddcontacts") then
         tdcli.add_contact(phone, first, last, id)
       end
-      if redis:get("gold:" .. tostring(gold_id) .. ":markread") then
+      if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":markread") then
         tdcli.viewMessages(msg.chat_id_, {
           [0] = msg.id_
         })
       end
-      if redis:get("gold:" .. tostring(gold_id) .. ":addedmsg") then
-        local answer = redis:get("gold:" .. tostring(gold_id) .. ":addedmsgtext") or [[
+      if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedmsg") then
+        local answer = redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedmsgtext") or [[
 Addi
 Bia pv]]
-        if redis:get("gold:" .. tostring(gold_id) .. ":typing") then
+        if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":typing") then
           tdcli.sendChatAction(msg.chat_id_, "Typing", 100)
         end
         tdcli.sendMessage(msg.chat_id_, msg.id_, 1, answer, 1, "html")
       end
-      if redis:get("gold:" .. tostring(gold_id) .. ":addedcontact") and msg.sender_user_id_ ~= our_id then
+      if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":addedcontact") and msg.sender_user_id_ ~= our_id then
         return tdcli.sendContact(msg.chat_id_, msg.id_, 0, 0, nil, botinfo.phone_number_, botinfo.first_name_, botinfo.last_name_, botinfo.id_)
       end
     elseif msg.content_.ID == "MessageChatDeleteMember" and msg.content_.id_ == our_id then
@@ -881,7 +881,7 @@ Bia pv]]
         end
       end
     elseif msg.content_.caption_ then
-      if redis:get("gold:" .. tostring(gold_id) .. ":markread") then
+      if redis:get("VIP-CONTROL:" .. tostring(VIP-CONTROL_id) .. ":markread") then
         tdcli.viewMessages(msg.chat_id_, {
           [0] = msg.id_
         })
