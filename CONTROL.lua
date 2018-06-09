@@ -211,7 +211,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
 ━━━━━━━━━━━━━━━━━
 - المطور ،♥️' :- @amody7]]
 return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
-elseif text_:match("^[!/#](الاوامر)") and is_sudo(msg) then
+elseif text_:match("^[!/#](م3)") and is_sudo(msg) then
       local text1 = [[اهلا صديقي في قائمة. الارسال جميع الاوامر تعمل ب (/#!)
 /حظر <ايدي الحساب>
 - لحظر الحساب صاحب الايدي ، 📵'
