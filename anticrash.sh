@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 while true ; do
-  for entr in tabchi-*.sh ; do
+  for entr in CONTROL-*.sh ; do
     entry="${entr/.sh/}"
     tmux kill-session -t $entry
     rm -rf ~/.telegram-cli/$entry/data/animation/*
