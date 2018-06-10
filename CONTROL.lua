@@ -75,7 +75,7 @@ end
 local contact_list
 function contact_list(extra, result)
   local count = result.total_count_
-  local text = "Robot Contacts : \n"
+  local text = "جهات اتصال البوت : \n"
   for i = 0, tonumber(count) - 1 do
     local user = result.users_[i]
     local firstname = user.first_name_ or ""
@@ -84,7 +84,7 @@ function contact_list(extra, result)
     text = tostring(text) .. tostring(i) .. ". " .. tostring(fullname) .. " [" .. tostring(user.id_) .. "] = " .. tostring(user.phone_number_) .. "\n"
   end
   writefile("CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", text)
-  tdcli.send_file(extra.chat_id_, "Document", "CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", "CONTROL " .. tostring(CONTROL_id) .. " Contacts!")
+  tdcli.send_file(extra.chat_id_, "Document", "CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", "ملف بوت🥀 (" .. tostring(CONTROL_id) .. " ) يحتوي على جميع جهات البوت♥️")
   return io.popen("rm -rf CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt"):read("*all")
 end
 local our_id
@@ -168,10 +168,8 @@ function process(msg)
           save_log("User " .. msg.sender_user_id_ .. ", Added " .. matches[2] .. " As Sudo")
           return tostring(matches[2]) .. " صاحب هذا الايدي تم اضافته الى قائمة مطورين البوت ✅"
         end
-if text_:match("^[!/#](help)") and is_sudo(msg) then
-send(msg.chat_id_, msg.id_, 1, help, 1, 'md')
-end
-local help = [[
+elseif text_:match("^[!/#](help)") and is_sudo(msg) then
+local text1 = [[
   اهلا صديقي جميع الاوامر تعمل ب (/#!)
 ━━━━━━━━━━━━━━━━━
 /send <userid> <text>
@@ -198,7 +196,13 @@ local help = [[
 ━━━━━━━━━━━━━━━━━
 /block <userid>
 - لحظر الحساب صاحب الايدي ، 📵'
-        ━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━
+/addedmsg <on/off>
+- تفعيل وتعطيل ميزة الرد على الجهة عند الاضافة
+عندما شخص يرسل الجهة والبوت يقوم بحفظها يقوم بأرسال له رسالة مثلا:- تم دز نقطة خاص
+يجب تحديد الرسال بأمر
+/setaddedmsg والرسالة
+━━━━━━━━━━━━━━━━━
 /unblock <userid>
 - لالغا حظر الحساب صاحب الايدي ، 📵'
 ━━━━━━━━━━━━━━━━━
@@ -242,6 +246,7 @@ local help = [[
  ━━━━━━━━━━━━━━━━━
 - المطور ،♥️' :- @amody7
 - قناة البوت ،🥀' :- @zhrf7]]
+    return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       elseif text_:match("^[!/#](remsudo) (%d+)") then
         local matches = {
           text_:match("^[!/#](remsudo) (%d+)")
@@ -402,8 +407,8 @@ local help = [[
         chat_id_ = msg.chat_id_
       })
     elseif text_:match("^[!/#]exportlinks$") then
-      local text = "Group Links :\n"
-      local links = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":savedlinks")
+      local text = "روابط المجموعات :\n"
+      local links = redis:smembers("ملف بوت 🥀(" .. tostring(CONTROL_id) .. ") يحتوي على جميع الروابط المحفوظة ♥️")
       for i, v in pairs(links) do
         if v:len() == 51 then
           text = tostring(text) .. tostring(v) .. "\n"
@@ -494,11 +499,11 @@ local help = [[
         if matches[2] == "on" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":addedmsg", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Added Message")
-          return "Added Message Turned On"
+          return " تم تفعيل خاصية الرد عند ارسال جهة اتصال الى البوت ، 👤"
         elseif matches[2] == "off" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":addedmsg")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Added Message")
-          return "Added Message Turned Off"
+          return " تم تعطيل خاصية الرد عند ارسال جهة اتصال الى البوت ، 👤"
         end
       end
     elseif text_:match("^[!/#](addedcontact) (.*)") then
@@ -614,8 +619,8 @@ local help = [[
         redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":addedmsgtext", matches[2])
         save_log("User " .. msg.sender_user_id_ .. ", Changed Added Message To : " .. matches[2])
         return [[
-New Added Message Set
-Message :
+تم تغير رسالة اضافة الجهات 
+الرسالة :
 ]] .. tostring(matches[2])
       end
     elseif text_:match("^[!/#](bc) (.*)") then
