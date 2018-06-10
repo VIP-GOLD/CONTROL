@@ -168,6 +168,9 @@ function process(msg)
           save_log("User " .. msg.sender_user_id_ .. ", Added " .. matches[2] .. " As Sudo")
           return tostring(matches[2]) .. " صاحب هذا الايدي تم اضافته الى قائمة مطورين البوت ✅"
         end
+if text_:match("^[!/#](help)") and is_sudo(msg) then
+send(msg.chat_id_, msg.id_, 1, help, 1, 'md')
+end
 local help = [[
   اهلا صديقي جميع الاوامر تعمل ب (/#!)
 ━━━━━━━━━━━━━━━━━
@@ -871,9 +874,6 @@ Bia pv]]
   elseif data.ID == "UpdateOption" and data.name_ == "my_id" then
     tdcli.getChats("9223372036854775807", 0, 20)
   end
-if text_:match("^[!/#](help)") and is_sudo(msg) then
-send(msg.chat_id_, msg.id_, 1, help, 1, 'md')
-end
 
 end
 return {update = update}
