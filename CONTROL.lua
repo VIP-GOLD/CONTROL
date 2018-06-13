@@ -544,7 +544,7 @@ local text1 = [[
         if matches[2] == "on" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":notjoinlinks")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Joinlinks")
-          return " تم تفعيل خاصية الانضمام التلقائي الى الروابط ، 👤"
+          return "♥️ ¦ اهلا صديقي\n🚸 ¦  تم تفعيل خاصية الانضمام التلقائي الى الروابط ، 👤\n📨¦ الان عندما البوت يستقبل رابط من قناة او شخص او مجموعة البوت سيقوم بالدخول الى الرابط والانضمام\n⭐️¦ لكن يجب ان يكون الرابط بصيغة Telegrm.me"
         elseif matches[2] == "off" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":notjoinlinks", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Joinlinks")
