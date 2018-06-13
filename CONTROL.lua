@@ -548,7 +548,7 @@ local text1 = [[
         elseif matches[2] == "off" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":notjoinlinks", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Joinlinks")
-          return " تم تعطيل خاصية الانضمام التلقائي الى الروابط ، 👤"
+          return "♥️ ¦ اهلا صديقي\n🚸 ¦  تم تعطيل خاصية الانضمام التلقائي الى الروابط ، 👤"
         end
       end
     elseif text_:match("^[!/#](savelinks) (.*)") then
