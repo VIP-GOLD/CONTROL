@@ -13,5 +13,5 @@ chmod 777 anticrash.sh
 RED='\033[0;31m'
 NC='\033[0m'
 CYAN='\033[0;36m'
-echo -e "${CYAN}Installation Completed.Decompiled By : @amody7 Create a bot with creator.lua (lua creator.lua)${NC}"
+echo -e "${CYAN}Installation Completed.\nDecompiled By : @amody7 Create a bot with creator.lua (lua creator.lua)${NC}"
 exit
