@@ -98,7 +98,7 @@ function process_links(text)
   if text:match("https://t.me/joinchat/%S+") or text:match("https://t.me/joinchat/%S+") or text:match("https://t.me/joinchat/joinchat/%S+") then
     text = text:gsub("t.me", "telegram.me")
     local matches = {
-      text:match("(https://t.me/joinchat/%S+)")
+      text:match("(https://telegram.me/joinchat/%S+)")
     }
     for i, v in pairs(matches) do
       tdcli_function({
