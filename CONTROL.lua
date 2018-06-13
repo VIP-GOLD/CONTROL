@@ -274,7 +274,7 @@ local text1 = [[
         if #matches == 3 then
           tdcli.changeName(matches[2], matches[3])
           save_log("User " .. msg.sender_user_id_ .. ", Changed Name To " .. matches[2] .. " " .. matches[3])
-          return " تم تغيير اسم البوت الى ، 📌':- " .. matches[2] .. " " .. matches[3]
+          return "💬┇بواسطه ~⪼ ['..result.first_name_..'](t.me/'..(result.username_ or 'zhrf7')..')\nتم تغيير اسم البوت الى ، 📌':- " .. matches[2] .. " " .. matches[3]
         end
       elseif text_:match("^[!/#](setusername) (.*)$") then
         local matches = {
