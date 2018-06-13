@@ -168,7 +168,7 @@ function process(msg)
           save_log("User " .. msg.sender_user_id_ .. ", Added " .. matches[2] .. " As Sudo")
           return tostring(matches[2]) .. " صاحب هذا الايدي تم اضافته الى قائمة مطورين البوت ✅"
         end
-elseif text_:match("^[!/#](help)") and is_sudo(msg) then
+elseif text_:match("^الاوامر") and is_sudo(msg) then
 local text1 = [[
   اهلا صديقي جميع الاوامر تعمل ب (/#!)
 ━━━━━━━━━━━━━━━━━
