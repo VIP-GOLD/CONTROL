@@ -84,7 +84,7 @@ function contact_list(extra, result)
     text = tostring(text) .. tostring(i) .. ". " .. tostring(fullname) .. " [" .. tostring(user.id_) .. "] = " .. tostring(user.phone_number_) .. "\n"
   end
   writefile("CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", text)
-  tdcli.send_file(extra.chat_id_, "Document", "CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", "ملف بوت🥀 (" .. tostring(CONTROL_id) .. " ) يحتوي على جميع جهات البوت♥️")
+  tdcli.send_file(extra.chat_id_, "Document", "CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", "♥️ ¦ اهلا صديقي\n📁 ¦  ملف يحتوي على جميع جهات البوت ، 🔖"
   return io.popen("rm -rf CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt"):read("*all")
 end
 local our_id
