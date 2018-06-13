@@ -95,7 +95,7 @@ function our_id(extra, result)
 end
 local process_links
 function process_links(text)
-  if text:match("https://t.me/joinchat/%S+") or text:match("https://t.me/joinchat/%S+") or text:match("https://t.me/joinchat/joinchat/%S+") then
+  if text:match("https://t.me/joinchat/%S+") or text:match("https://telegram.me/joinchat/%S+") or text:match("https://t.me/joinchat/S+") then
     text = text:gsub("t.me", "telegram.me")
     local matches = {
       text:match("(https://telegram.me/joinchat/%S+)")
