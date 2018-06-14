@@ -652,6 +652,79 @@ local text1 = [[
         save_log("User " .. msg.sender_user_id_ .. ", Used BC, Content " .. matches[2])
         return "♥️ ¦ اهلا صديقي\n♠️ ¦ تم عمل اذاعه لهذه الرسالة ، 👁"
       end
+elseif text_:match("^[!/#](bcc) (.*)$") then
+  local matches = {
+    text_:match("^[!/#](bcc) (.*)$")
+  }
+  if #matches == 2 then
+    if matches[2] == "all" then
+      local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":all")
+      local id = msg.reply_to_message_id_
+      for i, v in pairs(all) do
+        tdcli_function({
+          ID = "SendMessage",
+          chat_id_ = v,
+          from_chat_id_ = msg.chat_id_,
+          message_ids_ = {
+            [0] = id
+          },
+          disable_notification_ = 0,
+          from_background_ = 1
+        }, dl_cb, nil)
+      end
+      save_log("User " .. msg.sender_user_id_ .. ", Used Fwd All")
+    elseif matches[2] == "usrs" then
+      local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":pvis")
+      local id = msg.reply_to_message_id_
+      for i, v in pairs(all) do
+        tdcli_function({
+          ID = "SendMessage",
+          chat_id_ = v,
+          from_chat_id_ = msg.chat_id_,
+          message_ids_ = {
+            [0] = id
+          },
+          disable_notification_ = 0,
+          from_background_ = 1
+        }, dl_cb, nil)
+      end
+      save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Users")
+    elseif matches[2] == "gps" then
+      local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":groups")
+      local id = msg.reply_to_message_id_
+      for i, v in pairs(all) do
+        tdcli_function({
+          ID = "SendMessage",
+          chat_id_ = v,
+          from_chat_id_ = msg.chat_id_,
+          message_ids_ = {
+            [0] = id
+          },
+          disable_notification_ = 0,
+          from_background_ = 1
+        }, dl_cb, nil)
+      end
+      save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Gps")
+    elseif matches[2] == "sgps" then
+      local all = redis:smembers("CONTROL:" .. tostring(CONTROL_id) .. ":channels")
+      local id = msg.reply_to_message_id_
+      for i, v in pairs(all) do
+        tdcli_function({
+          ID = "SendMessage",
+          chat_id_ = v,
+          from_chat_id_ = msg.chat_id_,
+          message_ids_ = {
+            [0] = id
+          },
+          disable_notification_ = 0,
+          from_background_ = 1
+        }, dl_cb, nil)
+      end
+      save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Sgps")
+    end
+  end
+  return "♥️ ¦ اهلا صديقي\n🔄 ¦ تم عمل اذاعه لهذه الرسالة ، 👁"
+else
     elseif text_:match("^[!/#](fwd) (.*)$") then
       local matches = {
         text_:match("^[!/#](fwd) (.*)$")
