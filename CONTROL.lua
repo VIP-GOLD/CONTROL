@@ -84,7 +84,7 @@ function contact_list(extra, result)
     text = tostring(text) .. tostring(i) .. ". " .. tostring(fullname) .. " [" .. tostring(user.id_) .. "] = " .. tostring(user.phone_number_) .. "\n"
   end
   writefile("CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", text)
-  tdcli.send_file(extra.chat_id_, "Document", "CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", "♥️ ¦ اهلا صديقي\n📁 ¦  ملف يحتوي على جميع جهات البوت ، 🔖"
+  tdcli.send_file(extra.chat_id_, "Document", "CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt", "ملف بوت جهات الاتصال"
   return io.popen("rm -rf CONTROL_" .. tostring(CONTROL_id) .. "_contacts.txt"):read("*all")
 end
 local our_id
@@ -274,7 +274,7 @@ local text1 = [[
         if #matches == 3 then
           tdcli.changeName(matches[2], matches[3])
           save_log("User " .. msg.sender_user_id_ .. ", Changed Name To " .. matches[2] .. " " .. matches[3])
-          return "تم تغير اسم البوت الى ، 📌':- " .. matches[2] .. " " .. matches[3]
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦  تم تغيير اسم البوت الى  ، 🖤:- " .. matches[2] .. " " .. matches[3]
         end
       elseif text_:match("^[!/#](setusername) (.*)$") then
         local matches = {
@@ -283,7 +283,7 @@ local text1 = [[
         if #matches == 2 then
           tdcli.changeUsername(matches[2])
           save_log("User " .. msg.sender_user_id_ .. ", Changed Username To " .. matches[2])
-          return " تم تغيير معرف البوت الى ، 🔖':- @" .. matches[2]
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦  تم تغيير معرف البوت الى  ، 🖤:- @" .. matches[2]
         end
       elseif text_:match("^[!/#](delusername)$") then
         tdcli.changeUsername()
@@ -306,7 +306,7 @@ local text1 = [[
       if #matches == 3 then
         tdcli.sendMessage(tonumber(matches[2]), 0, 1, matches[3], 1, "html")
         save_log("User " .. msg.sender_user_id_ .. ", Sent A Pm To " .. matches[2] .. ", Content : " .. matches[3])
-        return "- تم ارسال الرسالة الى الجميع بنجاح ،✅'"
+        return "♥️ ¦ اهلا مطوري\n☑️  ¦ تم ارسال هذه الرسالة الى صاحب هذا الايدي، 🖤"
       end
 	  
     elseif text_:match("^[!/#](setanswer) '(.*)' (.*)") then
@@ -397,7 +397,7 @@ local text1 = [[
         limit_ = 999999999
       }, add_all, {})
       save_log("User " .. msg.sender_user_id_ .. ", Used AddMembers In " .. msg.chat_id_)
-      return " تم اضافة جميع جهات الاتصال  في المجموعة ،🚸"
+      return "♥️ ¦ اهلا مطوري\n☑️  ¦   تم اضافة جميع جهات اتصال البوت وشكو شخص مراسلني ع الخاص ، 🖤"
     elseif text_:match("^[!/#]contactlist$") then
       tdcli_function({
         ID = "SearchContacts",
@@ -479,17 +479,17 @@ local text1 = [[
       local contacts = redis:get("CONTROL:" .. tostring(CONTROL_id) .. ":totalcontacts")
       local query = tostring(gps) .. " " .. tostring(sgps) .. " " .. tostring(pvs) .. " " .. tostring(links) .. " " .. tostring(sudo) .. " " .. tostring(contacts)
       local text = [[
-        ֆ - - - - - - - - - - - - - - ֆ
-        - 📝 معلومات البوت الحالية ، 📌
-        - 🔖   المراسلهم :  ]] .. tostring(pvs) .. [[
+ֆ - - - - - - - - - - - - - - ֆ
+- 📝 معلومات البوت الحالية ، 📌
+- 🔖   المراسلهم :  ]] .. tostring(pvs) .. [[
                     
-        - 📯    المجموعات العادية : ]] .. tostring(gps) .. [[
+- 📯    المجموعات العادية : ]] .. tostring(gps) .. [[
                     
-        -📊    المجموعات الخارقة : ]] .. tostring(sgps) .. [[
+-📊    المجموعات الخارقة : ]] .. tostring(sgps) .. [[
                     
-        - 📨     الروابط المحفوظة :  ]] .. tostring(links) .. [[
+- 📨     الروابط المحفوظة :  ]] .. tostring(links) .. [[
         
-        🗃    الجهات المحفوظة : ]] .. tostring(contacts)
+🗃    الجهات المحفوظة : ]] .. tostring(contacts)
          return tdcli.sendMessage(msg.chat_id_, 0, 1, text, 1, "")
     elseif text_:match("^[!/#](addedmsg) (.*)") then
       local matches = {
@@ -499,11 +499,11 @@ local text1 = [[
         if matches[2] == "on" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":addedmsg", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Added Message")
-          return " تم تفعيل خاصية الرد عند ارسال جهة اتصال الى البوت ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦   تم تفعيل خاصية الرد برسالة عند ارسال جهة اتصال الى البوت ، 🖤"
         elseif matches[2] == "off" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":addedmsg")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Added Message")
-          return " تم تعطيل خاصية الرد عند ارسال جهة اتصال الى البوت ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦   تم تعطيل خاصية الرد برسالة عند ارسال جهة اتصال الى البوت ، 🖤"
         end
       end
     elseif text_:match("^[!/#](addedcontact) (.*)") then
@@ -514,11 +514,11 @@ local text1 = [[
         if matches[2] == "on" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":addedcontact", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Added Contact")
-          return " تم تفعيل خاصية حفظ الجهات تلقائيا ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦   تم تفعيل خاصيةارسال جهة البوت عند حفظ جهة اتصال ، ™"
         elseif matches[2] == "off" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":addedcontact")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Added Contact")
-          return " تم تفعيل خاصية حفظ الجهات تلقائيا ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦   تم تعطيل خاصيةارسال جهة البوت عند حفظ جهة اتصال ، ™"
         end
       end
     elseif text_:match("^[!/#](markread) (.*)") then
@@ -529,11 +529,11 @@ local text1 = [[
         if matches[2] == "on" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":markread", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Markread")
-          return " تم تفعيل خاصية تمت قرائة الرسالة ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦   تم تفعيل خاصية تمت قرائة الرسالة ، ✔️"
         elseif matches[2] == "off" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":markread")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Markread")
-          return " تم تعطيل خاصية تمت قرائة الرسالة ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦   تم تعطيل خاصية تمت قرائة الرسالة ، ✔️"
         end
       end
     elseif text_:match("^[!/#](joinlinks) (.*)") then
@@ -559,11 +559,11 @@ local text1 = [[
         if matches[2] == "on" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":notsavelinks")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Savelinks")
-          return " تم تفعيل خاصية حفظ روابط المجموعات والقنوات ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦  تم تفعيل خاصية حفظ روابط المجموعات والقنوات ، 🔗"
         elseif matches[2] == "off" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":notsavelinks", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Savelinks")
-          return " تم تعطيل خاصية حفظ روابط المجموعات والقنوات ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦  تم تعطيل خاصية حفظ روابط المجموعات والقنوات ، 🔗"
         end
       end
     elseif text_:match("^[!/#](addcontacts) (.*)") then
@@ -574,11 +574,11 @@ local text1 = [[
         if matches[2] == "on" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":notaddcontacts")
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Addcontacts")
-          return " تم تفعيل خاصية حفظ الجهات تلقائيا ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦  تم تفعيل خاصية حفظ الجهات تلقائيا ، ♿️"
         elseif matches[2] == "off" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":notaddcontacts", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Addcontacts")
-          return " تم تعطيل خاصية حفظ الجهات تلقائيا ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦  تم تعطيل خاصية حفظ الجهات تلقائيا ، ♿️"
         end
       end
     elseif text_:match("^[!/#](autochat) (.*)") then
@@ -589,11 +589,11 @@ local text1 = [[
         if matches[2] == "on" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":autochat", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Autochat")
-          return " تم تفعيل خاصية المحادثة التلقائية ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦ تم تفعيل خاصية المحادثة التلقائية ، 🗯"
         elseif matches[2] == "off" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":autochat")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Autochat")
-          return " تم تعطيل خاصية المحادثة التلقائية ، 👤"
+          return "♥️ ¦ اهلا صديقي\n☑️  ¦ تم تعطيل خاصية المحادثة التلقائية ، 🗯"
         end
       end
     elseif text_:match("^[!/#](typing) (.*)") then
@@ -604,11 +604,11 @@ local text1 = [[
         if matches[2] == "on" then
           redis:set("CONTROL:" .. tostring(CONTROL_id) .. ":typing", true)
           save_log("User " .. msg.sender_user_id_ .. ", Turned On Typing")
-          return " تم تفعيل خاصية جاري الكتابة ، 💭"
+          return "♥️ ¦ اهلا صديقي\n🎴 ¦ تم تفعيل خاصية جاري الكتابة ، 💭"
         elseif matches[2] == "off" then
           redis:del("CONTROL:" .. tostring(CONTROL_id) .. ":typing")
           save_log("User " .. msg.sender_user_id_ .. ", Turned Off Typing")
-          return " تم تعطيل خاصية جاري الكتابة ، 💭"
+          return "♥️ ¦ اهلا صديقي\n🎴 ¦ تم تعطيل خاصية جاري الكتابة ، 💭"
         end
       end
     elseif text_:match("^[!/#](setaddedmsg) (.*)") then
@@ -650,7 +650,7 @@ local text1 = [[
           }, dl_cb, nil)
         end
         save_log("User " .. msg.sender_user_id_ .. ", Used BC, Content " .. matches[2])
-        return " تم عمل اذاعه لهذه الرسالة ، 👁"
+        return "♥️ ¦ اهلا صديقي\n♠️ ¦ تم عمل اذاعه لهذه الرسالة ، 👁"
       end
     elseif text_:match("^[!/#](fwd) (.*)$") then
       local matches = {
@@ -723,7 +723,7 @@ local text1 = [[
           save_log("User " .. msg.sender_user_id_ .. ", Used Fwd Sgps")
         end
       end
-      return " تم عمل توجيه لهذه الرسالة ، 👁"
+      return "♥️ ¦ اهلا صديقي\n🔄 ¦ تم عمل توجيه لهذه الرسالة ، 👁"
     else
       local matches = {
         text_:match("^[!/#](echo) (.*)")
