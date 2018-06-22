@@ -169,7 +169,7 @@ function process(msg)
           save_log("User " .. msg.sender_user_id_ .. ", Added " .. matches[2] .. " As Sudo")
           return tostring(matches[2]) .. "👤¦ العضو \n🛠¦ تم ترقيته ليصبح مطور \n✓"
         end
-	elseif text_:match(("^[!/#]panel$") and is_sudo(msg) then
+	elseif text_:match(("^[!/#]help$") and is_sudo(msg) then
       local text1 = [[
 الاصدار الاول من سورس التحكم 1.0
 
