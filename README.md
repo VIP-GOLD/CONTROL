@@ -1,4 +1,4 @@
-# <p align="center" style="color:#cb3349" >📡 سـورس الـزعـيـم 📡
+# <p align="center" style="color:#cb3349" >📡 سـورس جهات الاتصال 📡
 
 # <p align="center" style="color: #14635c;" > @amody7  حصريا من   ⭐️
 
@@ -60,4 +60,5 @@ lua manual-creator.lua
  
 افتح ترمنال جديد ثم تدخل الكود الاتي <br>
  <br>  cd CONTROL
+ 
 .CONTROL-ايدي البوت.sh
